@@ -7,7 +7,9 @@ use OCA\NCDownloader\Search\Sites\searchInterface;
 use OCA\NCDownloader\Aria2\Options as aria2Options;
 use OCA\NCDownloader\Db\Settings;
 use OCP\IUser;
-use OC\Files\Filesystem;
+//  BEGIN STEVE EDITS
+// use OC\Files\Filesystem;
+//  END STEVE EDITS
 use OC_Util;
 use Psr\Log\LoggerInterface;
 use OCA\NCDownloader\Aria2\Aria2;
@@ -297,12 +299,20 @@ class Helper
     // the relative home folder of a nextcloud user,e.g. /admin/files
     public static function getUserFolder($uid = null): string
     {
-        if (!empty($rootFolder = Filesystem::getRoot())) {
-            return $rootFolder;
-        } else if (isset($uid)) {
-            return "/" . $uid . "/files";
-        }
-        return '';
+	    // BEGIN STEVE CODE
+	    // if (!empty($rootFolder = Filesystem::getRoot())) {
+            //    return $rootFolder;
+            // } else if (isset($uid)) {
+            //    return "/" . $uid . "/files";
+            // }
+            //    return '';
+	    //
+    	if (isset($uid)) {
+        	return "/" . $uid . "/files";
+    	}
+    	$uid = self::getUID();
+    	return $uid ? "/" . $uid . "/files" : '';
+	    // END STEVE CODE
     }
 
     public static function generateGID($str = null)
@@ -390,24 +400,51 @@ class Helper
 
     public static function getMountPoints(): ?array
     {
-        return Filesystem::getMountPoints("/");
+	//BEGIN STEVE CODE    
+	//return Filesystem::getMountPoints("/");
+	//
+	try {
+        	$mountManager = \OC::$server->get(\OCP\Files\IMountManager::class);
+        	return $mountManager->findIn('/');
+        } catch (\Exception $e) {
+        	return [];
+        }
+	//END STEVE CODE
     }
 
     public static function getDataDir(): string
     {
         return \OC::$server->getSystemConfig()->getValue('datadirectory');
     }
+//  BEGIN STEVE EDITS
+//    public static function getLocalFolder(string $path): string
+//    {
+//        if (self::getUID()) {
+//            OC_Util::setupFS();
+//            //get the real path of the file in the filesystem
+//            return \OC\Files\Filesystem::getLocalFile($path);
+//        }
+//        return "";
+//    }
 
-    public static function getLocalFolder(string $path): string
-    {
-        if (self::getUID()) {
-            OC_Util::setupFS();
-            //get the real path of the file in the filesystem
-            return \OC\Files\Filesystem::getLocalFile($path);
+public static function getLocalFolder(string $path): string
+{
+    $uid = self::getUID();
+    if ($uid) {
+        try {
+            $rootFolder = \OC::$server->get(\OCP\Files\IRootFolder::class);
+            $userFolder = $rootFolder->getUserFolder($uid);
+            $node = $userFolder->get($path);
+            $localPath = $node->getStorage()->getLocalFile($node->getInternalPath());
+            return $localPath !== null ? $localPath : "";
+        } catch (\OCP\Files\NotFoundException $e) {
+            return "";
         }
-        return "";
     }
+    return "";
+}
 
+//  END STEVE EDITS
     public static function getRealDownloadDir(): string
     {
         $dlDir = self::getDownloadDir();

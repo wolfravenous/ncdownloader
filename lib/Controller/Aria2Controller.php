@@ -12,7 +12,13 @@ use OCP\Files\IRootFolder;
 use OCP\IL10N;
 use OCP\IRequest;
 use OC_Util;
-use \OC\Files\Filesystem;
+// BEGIN STEVE EDITS
+
+//use \OC\Files\Filesystem;
+
+//use \OSP\Files\IRootFolder;
+
+// END STEVE EDITS
 
 class Aria2Controller extends Controller
 {
@@ -28,12 +34,14 @@ class Aria2Controller extends Controller
     private $rootFolder;
     private $downloadDir;
     private $urlGenerator;
+    private $userFolder;
     public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, IRootFolder $rootFolder, Aria2 $aria2)
     {
         parent::__construct($appName, $request);
         $this->uid = $UserId;
         $this->l10n = $IL10N;
-        $this->rootFolder = $rootFolder;
+	$this->rootFolder = $rootFolder;
+	$this->userFolder = $rootFolder->getUserFolder($UserId);
         $this->urlGenerator = \OC::$server->getURLGenerator();
         $this->downloadDir = Helper::getDownloadDir();
         OC_Util::setupFS();
@@ -196,14 +204,29 @@ class Aria2Controller extends Controller
             // $dir = $this->rootFolder->nodeExists($file) ? $this->downloadDir . "/" . $filename : $this->downloadDir;
             $dlDir = $extra['path'] ?? $this->downloadDir;
             $file = $dlDir. "/" . $filename;
-            $params = ['dir' => $dlDir];
-            $fileInfo = Filesystem::getFileInfo($file);
-            if ($fileInfo) {
-                $fileType = $fileInfo->getType();
-                if ($fileType === "dir") {
-                    $params = ['dir' => $file];
-                }
-            }
+	    $params = ['dir' => $dlDir];
+	    
+// BEGIN STEVE EDITS
+
+            //$fileInfo = Filesystem::getFileInfo($file);
+          //  if ($fileInfo) {
+        //        $fileType = $fileInfo->getType();
+      //          if ($fileType === "dir") {
+    //                $params = ['dir' => $file];
+  //              }
+//	    }
+
+try {
+    $node = $this->userFolder->get($file);
+    if ($node->getType() === \OCP\Files\FileInfo::TYPE_FOLDER) {
+        $params = ['dir' => $file];
+    }
+} catch (\OCP\Files\NotFoundException $e) {
+    // file not found, leave $params as-is
+}
+
+ // END STEVE EDITS
+
             $folderLink = $this->urlGenerator->linkToRoute('files.view.index', $params);
             //$peers = ($this->getPeers($info['gid']));
             $completed = Helper::formatBytes($value['completedLength']);

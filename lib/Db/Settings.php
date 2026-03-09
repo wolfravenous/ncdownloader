@@ -2,9 +2,13 @@
 
 namespace OCA\NCDownloader\Db;
 
-use OC\AllConfig;
 
-class Settings extends AllConfig
+//BEGIN STEVE CODE
+//use OC\AllConfig;
+use OCP\IConfig;
+//END STEVE CODE
+
+class Settings
 {
     //@config OC\AppConfig
     private $appConfig;
@@ -24,11 +28,12 @@ class Settings extends AllConfig
     {
         //$this->appConfig = \OC::$server->getAppConfig();
         //$this->appConfig = \OC::$server->getAppConfig();
-	$this->sysConfig = \OC::$server->getSystemConfig();
+        //$this->sysConfig = \OC::$server->getSystemConfig();
+	$this->allConfig = \OC::$server->get(IConfig::class);
         $this->appName = 'ncdownloader';
         $this->type = self::TYPE['USER'];
         $this->user = $user;
-        $this->allConfig = new AllConfig($this->sysConfig);
+        //$this->allConfig = new AllConfig($this->sysConfig);
         //$this->connAdapter = \OC::$server->getDatabaseConnection();
         //$this->conn = $this->connAdapter->getInner();
     }

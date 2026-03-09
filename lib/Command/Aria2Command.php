@@ -4,7 +4,8 @@ namespace OCA\NCDownloader\Command;
 
 use OCA\NCDownloader\Db\Helper as DbHelper;
 use OCA\NCDownloader\Tools\Helper;
-use OC\Core\Command\Base;
+//use OC\Core\Command\Base;
+use Symfony\Component\Console\Command\Command as Base;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

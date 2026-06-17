@@ -39,7 +39,7 @@ NC33 compatibility fixes by [wolfravenous](https://github.com/wolfravenous/ncdow
 
 ## Requirements
 
-- Nextcloud 33
+- Nextcloud 34
 - Ubuntu 22.04
 - PHP 8.3
 - Command line access with sudo

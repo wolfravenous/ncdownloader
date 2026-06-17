@@ -47,7 +47,10 @@ class MainController extends Controller
         //$this->rootFolder = $rootFolder;
         $this->aria2 = $aria2;
         $this->aria2->init();
-        $this->urlGenerator = \OC::$server->getURLGenerator();
+	// $this->urlGenerator = \OC::$server->getURLGenerator();
+	// BEGIN STEVE EDITS
+        $this->urlGenerator = \OC::$server->get(\OCP\IURLGenerator::class);
+        // END STEVE EDITS
         $this->dbconn = new DbHelper();
         $this->counters = new Counters($aria2, $this->dbconn, $UserId);
         $this->ytdl = $ytdl;

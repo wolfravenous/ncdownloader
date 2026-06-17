@@ -23,7 +23,10 @@ class SearchController extends Controller
         parent::__construct($appName, $request);
         $this->appName = $appName;
         $this->uid = $UserId;
-        $this->urlGenerator = \OC::$server->getURLGenerator();
+	// $this->urlGenerator = \OC::$server->getURLGenerator();
+	// BEGIN STEVE EDITS
+        $this->urlGenerator = \OC::$server->get(\OCP\IURLGenerator::class);
+        // END STEVE EDITS
         $this->search = new siteSearch();
     }
     /**

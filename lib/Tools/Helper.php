@@ -209,7 +209,10 @@ class Helper
         if (!function_exists($function_name)) {
             return false;
         }
-        $ini = \OC::$server->getIniWrapper();
+	// $ini = \OC::$server->getIniWrapper();
+	// BEGIN STEVE EDITS
+        $ini = \OC::$server->get(\OCP\IniGetWrapper::class);
+        // END STEVE EDITS
         $disabled = explode(',', $ini->get('disable_functions') ?: '');
         $disabled = array_map('trim', $disabled);
         if (in_array($function_name, $disabled)) {
@@ -225,12 +228,18 @@ class Helper
 
     public static function findBinaryPath($program, $default = null)
     {
-        $memcache = \OC::$server->getMemCacheFactory()->createDistributed('findBinaryPath');
+	// $memcache = \OC::$server->getMemCacheFactory()->createDistributed('findBinaryPath');
+	// BEGIN STEVE EDITS
+        $memcache = \OC::$server->get(\OCP\ICacheFactory::class)->createDistributed('findBinaryPath');
+        // END STEVE EDITS
         if ($memcache->hasKey($program)) {
             return $memcache->get($program);
         }
 
-        $dataPath = \OC::$server->getSystemConfig()->getValue('datadirectory');
+	// $dataPath = \OC::$server->getSystemConfig()->getValue('datadirectory');
+	// BEGIN STEVE EDITS
+        $dataPath = \OC::$server->get(\OCP\IConfig::class)->getSystemValue('datadirectory');
+        // END STEVE EDITS
         $paths = ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/opt/bin', $dataPath . "/bin"];
         $result = $default;
         $exeSniffer = new ExecutableFinder();
@@ -384,7 +393,10 @@ class Helper
     public static function getSearchSites(): array
     {
         $key = 'searchSites';
-        $memcache = \OC::$server->getMemCacheFactory()->createDistributed($key);
+	//$memcache = \OC::$server->getMemCacheFactory()->createDistributed($key);
+	// BEGIN STEVE EDITS
+        $memcache = \OC::$server->get(\OCP\ICacheFactory::class)->createDistributed($key);
+        // END STEVE EDITS
         if ($memcache->hasKey($key)) {
             $sites = $memcache->get($key);
         } else {
@@ -414,7 +426,10 @@ class Helper
 
     public static function getDataDir(): string
     {
-        return \OC::$server->getSystemConfig()->getValue('datadirectory');
+	// return \OC::$server->getSystemConfig()->getValue('datadirectory');
+	// BEGIN STEVE EDITS
+        return \OC::$server->get(\OCP\IConfig::class)->getSystemValue('datadirectory');
+        // END STEVE EDITS
     }
 //  BEGIN STEVE EDITS
 //    public static function getLocalFolder(string $path): string
@@ -528,7 +543,10 @@ public static function getLocalFolder(string $path): string
 
     public static function getAppPath(): string
     {
-        return \OC::$server->getAppManager()->getAppPath('ncdownloader');
+	// return \OC::$server->getAppManager()->getAppPath('ncdownloader');
+	// BEGIN STEVE EDITS
+        return \OC::$server->get(\OCP\App\IAppManager::class)->getAppPath('ncdownloader');
+        // END STEVE EDITS
     }
     public static function folderUpdated(string $dir): bool
     {

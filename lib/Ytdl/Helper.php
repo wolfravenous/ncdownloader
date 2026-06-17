@@ -19,7 +19,10 @@ class Helper
     {
         $this->dbconn = new DbHelper();
         $this->tablename = $this->dbconn->queryBuilder->getTableName("ncdownloader_info");
-        $this->user = \OC::$server->getUserSession()->getUser()->getUID();
+	// $this->user = \OC::$server->getUserSession()->getUser()->getUID();
+	// BEGIN STEVE EDITS
+        $this->user = \OC::$server->get(\OCP\IUserSession::class)->getUser()->getUID();
+        // END STEVE EDITS
     }
 
     public static function create()

@@ -6,6 +6,9 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
+// BEGIN STEVE EDITS
+use OCP\IUserSession;
+// END STEVE EDITS
 use OCP\Settings\ISettings;
 use OCA\NCDownloader\Db\Settings;
 use OCA\NCDownloader\Tools\Helper;
@@ -25,12 +28,18 @@ class Personal implements ISettings
 	public function __construct(
 		IDBConnection $connection,
 		ITimeFactory $timeFactory,
-		IConfig $config
+		IConfig $config,
+		// BEGIN STEVE EDITS
+		IUserSession $userSession
+		// END STEVE EDITS
 	) {
 		$this->connection = $connection;
 		$this->timeFactory = $timeFactory;
 		$this->config = $config;
-		$this->uid = \OC::$server->getUserSession()->getUser()->getUID();
+		//$this->uid = \OC::$server->getUserSession()->getUser()->getUID();
+		// BEGIN STEVE EDITS
+		$this->uid = $userSession->getUser()->getUID();
+		// END STEVE EDITS
 		$this->settings = new Settings($this->uid);
 	}
 

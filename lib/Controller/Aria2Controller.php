@@ -42,7 +42,10 @@ class Aria2Controller extends Controller
         $this->l10n = $IL10N;
 	$this->rootFolder = $rootFolder;
 	$this->userFolder = $rootFolder->getUserFolder($UserId);
-        $this->urlGenerator = \OC::$server->getURLGenerator();
+	// $this->urlGenerator = \OC::$server->getURLGenerator();
+	// BEGIN STEVE EDITS
+        $this->urlGenerator = \OC::$server->get(\OCP\IURLGenerator::class);
+        // END STEVE EDITS
         $this->downloadDir = Helper::getDownloadDir();
         OC_Util::setupFS();
         //$this->config = \OC::$server->getAppConfig();

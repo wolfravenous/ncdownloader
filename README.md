@@ -1,4 +1,4 @@
-# Vapor for Nextcloud 33
+# Vapor -|- Condensing the Web into Your Cloud
 
 - [English](README.md)
 - [简体中文](README.zh-CN.md)
@@ -39,7 +39,7 @@ NC33 compatibility fixes by [wolfravenous](https://github.com/wolfravenous/vapor
 
 ## Requirements
 
-- Nextcloud 33
+- Nextcloud 34
 - Ubuntu 22.04
 - PHP 8.3
 - Command line access with sudo

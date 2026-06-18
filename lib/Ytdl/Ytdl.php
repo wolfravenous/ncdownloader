@@ -54,7 +54,9 @@ class Ytdl
         }
         $this->setEnv('LANG', $lang);
         $this->addOption("--no-mtime");
-        $this->addOption('--ignore-errors');
+	$this->addOption('--ignore-errors');
+	$this->addOption('--js-runtimes');
+	$this->addOption('node');
 
         if (($index = $this->hasOption('--output')) !== false) {
             $this->outTpl = $this->options[$index + 1];

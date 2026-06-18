@@ -9,9 +9,10 @@ Vapor is a Nextcloud app that brings a full-featured download manager directly i
 - Control Aria2 and manage all download tasks from the web
 - Download videos and audio from 700+ sites via yt-dlp (YouTube, Dailymotion, Twitter, Facebook and many more)
 
-<img width="800" alt="Vapor download manager interface" src="https://user-images.githubusercontent.com/3911975/132008308-dec2a7ba-4387-441e-9ded-538d61fbccf0.png">
-<img width="800" alt="Vapor task list" src="https://user-images.githubusercontent.com/3911975/142444998-54dd54a6-0c8e-4d49-8188-270964a99c50.png">
-<img width="800" alt="Vapor settings" src="https://user-images.githubusercontent.com/3911975/142445020-27ec389a-5437-4d28-acc0-5e757fd6897d.png">
+<img width="800" alt="Vapor download manager interface" src="screenshots/vaporFullApp.png">
+<img width="800" alt="Vapor settings panel" src="screenshots/vaporSettingsRevealed.png">
+<img width="800" alt="Vapor admin settings" src="screenshots/vaporAdminSettings.png">
+<img width="800" alt="Vapor personal settings" src="screenshots/vaporPersonalSettings.png">
 
 ---
 

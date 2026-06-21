@@ -163,7 +163,15 @@ class Ytdl
             }
         });
         if ($process->isSuccessful()) {
-            $this->helper->updateStatus(Helper::STATUS['COMPLETE']);
+		$this->helper->updateStatus(Helper::STATUS['COMPLETE']);
+            // BEGIN STEVE EDITS
+            if ($this->helper->alreadyDownloaded) {
+                return [
+                    'duplicate' => true,
+                    'message' => sprintf('You already downloaded "%s". To get it again, use the Redownload button next to it in your download history.', $this->helper->file ?: 'this item'),
+                ];
+            }
+            // END STEVE EDITS		
             return ['message' => $this->helper->file ?? $process->getErrorOutput()];
         }
         return ['error' => $process->getErrorOutput()];
@@ -271,9 +279,6 @@ class Ytdl
     {
         $process = new Process([$this->bin, '--version']);
 	$process->run();
-	// BEGIN STEVE EDITS
-        \OC::$server->get(\Psr\Log\LoggerInterface::class)->error('VAPOR DEBUG2: cmd=' . $process->getCommandLine() . ' exitcode=' . $process->getExitCode() . ' success=' . ($process->isSuccessful() ? 'yes' : 'no') . ' stdout=' . substr($process->getOutput(), 0, 1000) . ' stderr=' . substr($process->getErrorOutput(), 0, 1000) . ' helperfile=' . ($this->helper->file ?? 'NULL'));
-        // END STEVE EDITS
         if ($process->isSuccessful()) {
             //remove any new line
             return trim($process->getOutput());

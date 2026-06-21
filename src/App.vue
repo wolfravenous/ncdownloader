@@ -17,6 +17,8 @@ import { translate as t, translatePlural as n } from "@nextcloud/l10n";
 import Http from "./lib/http";
 import contentTable from "./lib/contentTable";
 
+
+
 const successCallback = (data, element) => {
   if (!data) {
     helper.error(t("vapor", "Something must have gone wrong!"));
@@ -24,6 +26,13 @@ const successCallback = (data, element) => {
   }
   if (data.hasOwnProperty("error")) {
     helper.error(t("vapor", data.error));
+  } else if (data.hasOwnProperty("duplicate")) {
+    // BEGIN STEVE EDITS
+    helper._message(t("vapor", data.message), {
+      duration: 15000,
+      backgroundColor: "#1976d2",
+    });
+    // END STEVE EDITS
   } else if (data.hasOwnProperty("message")) {
     helper.message(t("vapor", data.message));
   } else if (data.hasOwnProperty("file")) {

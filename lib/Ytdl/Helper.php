@@ -7,6 +7,9 @@ use OCA\Vapor\Tools\Helper as ToolsHelper;
 class Helper
 {
     public $file = null;
+    // BEGIN STEVE EDITS
+    public $alreadyDownloaded = false;
+    // END STEVE EDITS
     protected $pid = 0;
     protected $dbconn;
     protected $tablename;
@@ -92,6 +95,14 @@ class Helper
     }
     public function run(string $buffer, array $extra)
     {
+        // BEGIN STEVE EDITS
+        if (stripos($buffer, 'has already been downloaded') !== false) {
+            $this->alreadyDownloaded = true;
+            if (preg_match('#\[download\]\s+(?<filename>.*)\s+has already been downloaded#i', $buffer, $m)) {
+                $this->file = basename($m['filename']);
+            }
+        }
+        // END STEVE EDITS	    
         $info = $this->getSiteInfo($buffer);
         if (isset($info["id"])) {
             $this->gid = ToolsHelper::generateGID($info["id"]);
